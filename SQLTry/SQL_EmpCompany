@@ -82,3 +82,46 @@ on A.ReportsTo = B.firstname where
 --SELECT * FROM CompanyBossDetails ORDER BY Age DESC LIMIT (N-1,1);
 
 Select Top 1 age from (Select Distinct Top 3 Age from CompanyBossDetails order by Age desc) as temp order by Age desc;
+
+
+
+Select count(*) as 'Count of Position',Position from CompanyBossDetails group by Position
+
+
+CREATE TABLE maitable_G3GTS(group_id  int,Product varchar(10),
+							Foreign Key(group_id) References cb_vendorinformation(group_id));
+
+
+CREATE TABLE cb_vendorinformation(group_id  int,firstname varchar(10),
+								lastname varchar(10),
+								Address varchar(10),
+								Mobile int,PRIMARY KEY (group_id)
+								);
+
+
+Insert into cb_vendorinformation (group_id,firstname,lastname,Address,Mobile) values
+								(1,'Athira','Nair','CEO',30);
+Insert into cb_vendorinformation (group_id,firstname,lastname,Address,Mobile) values
+								(2,'Hari','Nair','ABC',0220202);
+Insert into cb_vendorinformation (group_id,firstname,lastname,Address,Mobile) values
+								(3,'Vibha','Nair','EFG',30827255);
+
+Alter table maitable_G3GTS add firstname varchar(10);
+
+Insert into maitable_G3GTS (group_id,Product,firstname) values
+								(1,'Mobile','Athira');
+Insert into maitable_G3GTS (group_id,Product,firstname) values
+								(2,'Watch','Hari');
+Insert into maitable_G3GTS (group_id,Product,firstname) values
+								(3,'Ipad','Hari');
+
+
+select * from cb_vendorinformation
+
+select * from maitable_G3GTS
+
+
+Select Product,Count(*) as 'Count', A.firstname from maitable_G3GTS A Join cb_vendorinformation B 
+on A.group_id= B.group_id 
+group BY A.firstname, Product
+order by count(A.firstname) asc,A.Product desc
