@@ -1,0 +1,84 @@
+use TESTDB;
+
+CREATE TABLE CompanyBossDetails(firstname varchar(10),
+								lastname varchar(10),
+								ReportsTo varchar(10),
+								Position varchar(10),
+								Age int
+								);
+
+
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Athira','Nair',null,'CEO',30);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Hari','Nair','Athira','Director',36);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Vibha','Nair','Hari','Assistant',10);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Anjali','Nair','Athira','Assistant',20);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Avanthika','Nair','Hari','Intern',5);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Appus','Nair','Hari','Intern',30);
+Insert into CompanyBossDetails (firstname,lastname,ReportsTo,Position,Age) values
+								('Usha','Nair',null,'Intern',50);
+
+
+Select * from CompanyBossDetails;
+
+Select * from CompanyBossDetails where ReportsTo is NULL or ReportsTo ='Athira' Order by Age;
+
+Select  A.firstname, A.Position, A.ReportsTo, B.Position as 'Boss Title' 
+from CompanyBossDetails A , CompanyBossDetails B
+	--on A.ReportsTo = B.firstname 
+	where A.firstname = B.firstname
+	and (A.ReportsTo is NULL 
+	or A.ReportsTo ='Athira') 
+	Order by A.Age;
+
+	
+
+Select  A.firstname,A.Position,A.ReportsTo,'CEO' as 'Boss Title' 
+from CompanyBossDetails A , CompanyBossDetails B
+	--on A.ReportsTo = B.firstname 
+	where A.firstname = B.firstname
+	and (A.ReportsTo is NULL 
+	or A.ReportsTo ='Athira') 
+	Order by A.Age;
+
+	Select * from CompanyBossDetails;
+
+-- Correct with position but null not working
+Select  A.firstname, A.Position, A.ReportsTo,ISNULL(B.Position,'None') as 'Boss Title' 
+from CompanyBossDetails A Left Join CompanyBossDetails B
+on A.ReportsTo = B.firstname where
+	 A.ReportsTo is NULL 
+	or A.ReportsTo ='Athira'
+	Order by A.Age;
+
+
+Select  A.firstname, A.Position, A.ReportsTo,ISNULL(B.Position,'None') as 'Boss Title' 
+from CompanyBossDetails A Left Join CompanyBossDetails B
+on A.ReportsTo = B.firstname where
+	 A.ReportsTo is NULL 
+	or A.ReportsTo ='Hari'
+	Order by A.Age;
+
+
+
+-- Right Join TRY
+	Select  A.firstname, A.Position, A.ReportsTo,ISNULL(B.Position,'None') as 'Boss Title' 
+from CompanyBossDetails A Right Join CompanyBossDetails B
+on A.ReportsTo = B.firstname where
+	 A.ReportsTo is NULL 
+	or A.ReportsTo ='Athira'
+	Order by A.Age;
+
+
+
+-- Print the third largest age
+
+--Select firstname, Position, Age from CompanyBossDetails Order by Age desc LIMIT 2;
+--SELECT * FROM CompanyBossDetails ORDER BY Age DESC LIMIT (N-1,1);
+
+Select Top 1 age from (Select Distinct Top 3 Age from CompanyBossDetails order by Age desc) as temp order by Age desc;
